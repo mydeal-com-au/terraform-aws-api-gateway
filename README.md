@@ -5,25 +5,7 @@
 
 <!--- BEGIN_TF_DOCS --->
 
-## Requirements
-
-| Name | Version |
-|------|---------|
-| terraform | >= 0.13.0 |
-
-## Providers
-
-| Name | Version |
-|------|---------|
-| aws | n/a |
-
-## Inputs
-
-No input.
-
-## Outputs
-
-No output.
+Error: Invalid character: Single quotes are not valid. Use double quotes (") to enclose strings. (and 5 other messages)
 
 <!--- END_TF_DOCS --->
 
