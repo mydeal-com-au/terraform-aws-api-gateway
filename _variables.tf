@@ -6,7 +6,12 @@ variable "api_type" {
 variable "name" {
   description = "Api Gateway name"
   default     = ""
-  type        = string
+}
+
+variable "open_api_file" {
+  description = "Path to the open api specification"
+  default = ""
+  type    = string
 }
 
 variable "domains" {
