@@ -9,6 +9,30 @@ variable "name" {
   type        = string
 }
 
+variable "domains" {
+  description = "Domains to be created for the API GATEWAY"
+  default = list(object)
+  type = list(object({
+    domain = string
+    api_route_mapping = string
+    certificate_arn = string
+    zone_id = string
+  }))
+}
+
+variable "integrations" {
+  description = "Integrations to be created in the API GATEWAY"
+  default = list(object)
+  type = list(object({
+    name = string
+    integration_type = string
+    integration_method = string
+    integration_uri = string
+    route_key = string
+    api_route_mapping = string
+  }))
+}
+
 variable "domain_name" {
   description = "Domain name"
   default     = ""
