@@ -5,7 +5,7 @@
 
 <!--- BEGIN_TF_DOCS --->
 
-Error: Invalid character: Single quotes are not valid. Use double quotes (") to enclose strings. (and 5 other messages)
+Error: Function calls not allowed: Functions may not be called here. (and 7 other messages)
 
 <!--- END_TF_DOCS --->
 
