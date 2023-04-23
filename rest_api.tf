@@ -78,6 +78,14 @@ resource "aws_api_gateway_stage" "rest_stage" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api[0].id
   stage_name    = "${var.environment_name}-stage"
 }
+
+resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
+  count       = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  name        = "${var.environment_name}-${var.name}-vpclink"
+  description = "${var.environment_name}-${var.name} API Gateway VPC LINK"
+  target_arns = []
+}
+
 #
 #resource "aws_wafv2_web_acl_association" "rest_waf_association" {
 #  count       = var.api_type == "rest" && length(var.web_acl_arn) > 0 ? 1 : 0

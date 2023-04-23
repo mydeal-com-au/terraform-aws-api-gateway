@@ -58,3 +58,11 @@ resource "aws_route53_record" "hosted_zone" {
     evaluate_target_health = false
   }
 }
+
+resource "aws_apigatewayv2_vpc_link" "gateway_vpc_link" {
+  count              = var.api_type == "http" && var.create_vpc_link ? 1 : 0
+  name               = "${var.environment_name}-${var.name}-vpclink"
+  security_group_ids = []
+  subnet_ids         = data.aws_subnets.current.ids
+  tags               = var.tags
+}

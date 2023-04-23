@@ -48,3 +48,13 @@ variable "integrations" {
     api_route_mapping = string
   }))
 }
+
+variable "create_vpc_link" {
+  description = ""
+  type = bool
+  default = false
+}
+
+variable "tags" {
+  default = {}
+}
