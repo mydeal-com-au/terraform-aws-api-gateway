@@ -15,7 +15,7 @@ resource "aws_apigatewayv2_integration" "http_integration" {
 resource "aws_apigatewayv2_route" "integration_route" {
   for_each           = {for integration in var.integrations: integration.name => integration if var.api_type == "http"}
   api_id    = aws_apigatewayv2_api.api[0].id
-  route_key = each.value.route_key
+  route_key = "ANY /${each.value.api_route_mapping}"
 
   target = "integrations/${aws_apigatewayv2_integration.http_integration[each.value.name].id}"
 }
