@@ -56,6 +56,8 @@ resource "aws_api_gateway_integration" "integration" {
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
   uri                     = each.value.integration_uri
+
+  connection_type         = each.value.connection_type
   depends_on = [data.aws_api_gateway_resource.rest_resource]
 }
 

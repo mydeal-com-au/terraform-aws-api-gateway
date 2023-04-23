@@ -46,6 +46,7 @@ variable "integrations" {
     integration_uri = string
     route_key = string
     api_route_mapping = string
+    connection_type   = string
   }))
 }
 
