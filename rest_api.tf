@@ -58,6 +58,7 @@ resource "aws_api_gateway_integration" "integration" {
   uri                     = each.value.integration_uri
 
   connection_type         = each.value.connection_type
+  connection_id           = var.create_vpc_link ? aws_api_gateway_vpc_link.gateway_vpc_link[0].id : ""
   depends_on = [data.aws_api_gateway_resource.rest_resource]
 }
 
@@ -85,7 +86,7 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
   count       = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
   name        = "${var.environment_name}-${var.name}-vpclink"
   description = "${var.environment_name}-${var.name} API Gateway VPC LINK"
-  target_arns = []
+  target_arns = [var.target_arn]
 }
 
 #

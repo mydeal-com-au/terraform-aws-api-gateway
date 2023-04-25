@@ -11,11 +11,18 @@ variable "api_type" {
 variable "api_description" {
   description = "Description for the API"
   type        = string
+  default = ""
 }
 
 variable "open_api_file" {
   description = "Path to the open api specification"
   default = ""
+  type    = string
+}
+
+variable "target_arn" {
+  description = "Target ARN's to the vpc link"
+  default =  ""
   type    = string
 }
 
@@ -51,6 +58,12 @@ variable "integrations" {
 
 variable "create_vpc_link" {
   description = ""
+  type = bool
+  default = false
+}
+
+variable "create_api_key" {
+  description = "Boolean variable that's evaluate the creation of an api key"
   type = bool
   default = false
 }
