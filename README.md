@@ -21,15 +21,17 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| api\_description | Description for the API | `string` | n/a | yes |
+| api\_description | Description for the API | `string` | `""` | no |
 | api\_type | Type of the API. http or rest | `string` | n/a | yes |
+| create\_api\_key | Boolean variable that's evaluate the creation of an api key | `bool` | `false` | no |
 | create\_vpc\_link | n/a | `bool` | `false` | no |
 | domains | Domains to be created for the API GATEWAY | <pre>list(object({<br>    domain = string<br>    api_route_mapping = string<br>    certificate_arn = string<br>    zone_id = string<br>  }))</pre> | `[]` | no |
 | environment\_name | Name of the environment | `string` | `""` | no |
-| integrations | Integrations to be created in the API GATEWAY | <pre>list(object({<br>    name = string<br>    integration_type = string<br>    integration_method = string<br>    integration_uri = string<br>    route_key = string<br>    api_route_mapping = string<br>  }))</pre> | `[]` | no |
+| integrations | Integrations to be created in the API GATEWAY | <pre>list(object({<br>    name = string<br>    integration_type = string<br>    integration_method = string<br>    integration_uri = string<br>    api_route_mapping = string<br>    connection_type   = string<br>  }))</pre> | `[]` | no |
 | name | Api Gateway name | `string` | `""` | no |
 | open\_api\_file | Path to the open api specification | `string` | `""` | no |
 | tags | n/a | `map` | `{}` | no |
+| target\_arn | Target ARN's to the vpc link | `string` | `""` | no |
 
 ## Outputs
 
