@@ -21,6 +21,7 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| allowed\_ips | List of allowed IP's to access the API | `list` | `[]` | no |
 | api\_description | Description for the API | `string` | `""` | no |
 | api\_type | Type of the API. http or rest | `string` | n/a | yes |
 | create\_api\_key | Boolean variable that's evaluate the creation of an api key | `bool` | `false` | no |
