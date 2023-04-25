@@ -57,7 +57,7 @@ resource "aws_api_gateway_integration" "integration" {
   type                    = "HTTP_PROXY"
   uri                     = each.value.integration_uri
 
-  connection_type         = each.value.connection_type
+  connection_type         = try(each.value.connection_type, "INTERNET")
   connection_id           = var.create_vpc_link ? aws_api_gateway_vpc_link.gateway_vpc_link[0].id : ""
   depends_on = [data.aws_api_gateway_resource.rest_resource]
 }
