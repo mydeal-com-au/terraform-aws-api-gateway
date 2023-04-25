@@ -89,6 +89,32 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
   target_arns = [var.target_arn]
 }
 
+data "aws_iam_policy_document" "ip_resource_policy" {
+  count       = var.api_type == "rest" && length(var.allowed_ips) > 0 ? 1 : 0
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions   = ["execute-api:Invoke"]
+    resources = [aws_api_gateway_rest_api.rest_api[0].execution_arn]
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = var.allowed_ips
+    }
+  }
+}
+resource "aws_api_gateway_rest_api_policy" "test" {
+  count       = var.api_type == "rest" && length(var.allowed_ips) > 0 ? 1 : 0
+  rest_api_id = aws_api_gateway_rest_api.rest_api[0].id
+  policy      = data.aws_iam_policy_document.ip_resource_policy[0].json
+}
+
 #
 #resource "aws_wafv2_web_acl_association" "rest_waf_association" {
 #  count       = var.api_type == "rest" && length(var.web_acl_arn) > 0 ? 1 : 0

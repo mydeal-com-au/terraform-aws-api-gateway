@@ -71,3 +71,9 @@ variable "create_api_key" {
 variable "tags" {
   default = {}
 }
+
+variable "allowed_ips" {
+  description = "List of allowed IP's to access the API"
+  type = list
+  default = []
+}
