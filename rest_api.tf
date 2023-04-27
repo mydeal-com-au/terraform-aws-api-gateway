@@ -13,7 +13,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 resource "aws_api_gateway_domain_name" "rest_domain_name" {
   for_each           = {for domain in var.domains: domain.domain => domain if var.api_type == "rest"}
   domain_name              = "${each.value.domain}"
-  regional_certificate_arn = each.value.certificate_arn
+  regional_certificate_arn = data.aws_acm_certificate.certificates[each.value.domain].arn
 
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -32,7 +32,7 @@ resource "aws_route53_record" "rest_api_records" {
   for_each           = {for domain in var.domains: domain.domain => domain if var.api_type == "rest"}
   name     = aws_api_gateway_domain_name.rest_domain_name[each.value.domain].domain_name
   type     = "A"
-  zone_id  = each.value.zone_id
+  zone_id  = data.aws_route53_zone.hosted_zones[each.value.domain].id
 
   alias {
     evaluate_target_health = false

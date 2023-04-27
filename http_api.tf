@@ -32,7 +32,7 @@ resource "aws_apigatewayv2_domain_name" "domain_name" {
   domain_name = "${each.value.domain}"
 
   domain_name_configuration {
-    certificate_arn = each.value.certificate_arn
+    certificate_arn = data.aws_acm_certificate.certificates[each.value.domain].arn
     endpoint_type   = "REGIONAL"
     security_policy = "TLS_1_2"
   }
@@ -50,7 +50,7 @@ resource "aws_route53_record" "hosted_zone" {
   for_each           = {for domain in var.domains: domain.domain => domain if var.api_type == "http"}
   name    = aws_apigatewayv2_domain_name.domain_name[each.value.domain].domain_name
   type    = "A"
-  zone_id = each.value.zone_id
+  zone_id = data.aws_route53_zone.hosted_zones[each.value.domain].id
 
   alias {
     name                   = aws_apigatewayv2_domain_name.domain_name[each.value.domain].domain_name_configuration[0].target_domain_name

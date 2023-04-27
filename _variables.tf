@@ -38,8 +38,7 @@ variable "domains" {
   type = list(object({
     domain = string
     api_route_mapping = string
-    certificate_arn = string
-    zone_id = string
+    zone_name = string
   }))
 }
 
