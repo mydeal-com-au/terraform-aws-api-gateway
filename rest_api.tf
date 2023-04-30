@@ -6,8 +6,6 @@ resource "aws_api_gateway_rest_api" "rest_api" {
     types = ["REGIONAL"]
   }
 
-  body = file(var.open_api_file)
-
 }
 
 resource "aws_api_gateway_domain_name" "rest_domain_name" {
