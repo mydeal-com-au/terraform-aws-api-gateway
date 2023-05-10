@@ -26,7 +26,7 @@
 | api\_type | Type of the API. http or rest | `string` | n/a | yes |
 | create\_api\_key | Boolean variable that's evaluate the creation of an api key | `bool` | `false` | no |
 | create\_vpc\_link | n/a | `bool` | `false` | no |
-| custom\_authorizers | Custom authorizer variables | <pre>list(object({<br>    name = string<br>    lambda_uri = string<br>    iam_role_arn = string<br>    custom_authorizer_lambda_code = string<br>  }))</pre> | `[]` | no |
+| custom\_authorizers | Custom authorizer variables | <pre>list(object({<br>    name = string<br>    custom_authorizer_lambda_code = string<br>  }))</pre> | `[]` | no |
 | domains | Domains to be created for the API GATEWAY | <pre>list(object({<br>    domain = string<br>    api_route_mapping = string<br>    zone_name = string<br>  }))</pre> | `[]` | no |
 | environment\_name | Name of the environment | `string` | `""` | no |
 | integrations | Integrations to be created in the API GATEWAY | <pre>list(object({<br>    name = string<br>    integration_type = string<br>    integration_method = string<br>    integration_uri = string<br>    api_route_mapping = string<br>    connection_type   = string<br>  }))</pre> | `[]` | no |
