@@ -82,8 +82,6 @@ variable "custom_authorizers" {
   default = []
   type = list(object({
     name = string
-    lambda_uri = string
-    iam_role_arn = string
     custom_authorizer_lambda_code = string
   }))
 
