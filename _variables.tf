@@ -76,3 +76,15 @@ variable "allowed_ips" {
   type = list
   default = []
 }
+
+variable "custom_authorizers" {
+  description = "Custom authorizer variables"
+  default = []
+  type = list(object({
+    name = string
+    lambda_uri = string
+    iam_role_arn = string
+    custom_authorizer_lambda_code = string
+  }))
+
+}

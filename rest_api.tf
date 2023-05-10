@@ -19,6 +19,8 @@ resource "aws_api_gateway_deployment" "rest_deployment" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [aws_api_gateway_method.rest_method]
 }
 
 resource "aws_api_gateway_stage" "rest_stage" {
