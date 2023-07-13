@@ -92,7 +92,7 @@ resource "aws_api_gateway_integration" "integration" {
   connection_id   = var.create_vpc_link ? aws_api_gateway_vpc_link.gateway_vpc_link[0].id : ""
 }
 resource "aws_lb" "integration_vpc_endpoint" {
-  count       = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  count              = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
   name               = "api-gateway-integration"
   internal           = true
   load_balancer_type = "network"
@@ -106,7 +106,7 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
 }
 
 resource "aws_api_gateway_integration" "api_gateway_integration" {
-  for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && integration.integration_type == "vpc_link"}
+  for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && integration.integration_type == "vpc_link" }
   rest_api_id = aws_api_gateway_rest_api.rest_api[0].id
   resource_id = aws_api_gateway_resource.rest_resource[each.value.name].id
   http_method = aws_api_gateway_method.rest_method[each.value.name].http_method

@@ -46,12 +46,12 @@ variable "routes" {
   description = "Routes to be created in the API"
   default     = []
   type = list(object({
-    name               = string
-    method             = string
-    integration_type   = string
-    integration_uri    = string
-    route_mapping  = string
-    connection_type    = string
+    name             = string
+    method           = string
+    integration_type = string
+    integration_uri  = string
+    route_mapping    = string
+    connection_type  = string
   }))
 
   validation {
