@@ -31,7 +31,7 @@
 | environment\_name | Name of the environment | `string` | `""` | no |
 | name | Api Gateway name | `string` | `""` | no |
 | open\_api\_file | Path to the open api specification | `string` | `""` | no |
-| routes | Routes to be created in the API | <pre>list(object({<br>    name               = string<br>    method             = string<br>    integration_type   = string<br>    integration_uri    = string<br>    route_mapping  = string<br>    connection_type    = string<br>  }))</pre> | `[]` | no |
+| routes | Routes to be created in the API | <pre>list(object({<br>    name             = string<br>    method           = string<br>    integration_type = string<br>    integration_uri  = string<br>    route_mapping    = string<br>    connection_type  = string<br>  }))</pre> | `[]` | no |
 | tags | n/a | `map` | `{}` | no |
 | target\_arn | Target ARN's to the vpc link | `string` | `""` | no |
 
