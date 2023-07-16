@@ -1,7 +1,7 @@
 variable "name" {
   description = "Api Gateway name"
   default     = ""
-  type = string
+  type        = string
 }
 
 variable "api_type" {
@@ -66,7 +66,7 @@ variable "create_api_key" {
 
 variable "tags" {
   default = {}
-  type = map(string)
+  type    = map(string)
 }
 
 variable "allowed_ips" {
