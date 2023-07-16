@@ -22,7 +22,7 @@ data "aws_subnets" "private" {
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.current[0].id]
+    values = [data.aws_vpc.current.id]
   }
 
   filter {
