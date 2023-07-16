@@ -1,6 +1,7 @@
 variable "name" {
   description = "Api Gateway name"
   default     = ""
+  type = string
 }
 
 variable "api_type" {
@@ -12,18 +13,6 @@ variable "api_description" {
   description = "Description for the API"
   type        = string
   default     = ""
-}
-
-variable "open_api_file" {
-  description = "Path to the open api specification"
-  default     = ""
-  type        = string
-}
-
-variable "target_arn" {
-  description = "Target ARN's to the vpc link"
-  default     = ""
-  type        = string
 }
 
 variable "environment_name" {
@@ -59,7 +48,7 @@ variable "routes" {
       for route in var.routes : true
       if contains(["HTTP", "HTTP_PROXY", "AWS_PROXY", "VPC_LINK"], route.integration_type)
     ]) == length(var.routes)
-    error_message = "The integration_type must be HTTP, or HTTP_PROXY or VPC_LINK or AWS_PROXY"
+    error_message = "The integration_type must be HTTP, or HTTP_PROXY or VPC_LINK or AWS_PROXY."
   }
 }
 
@@ -77,6 +66,7 @@ variable "create_api_key" {
 
 variable "tags" {
   default = {}
+  type = map(string)
 }
 
 variable "allowed_ips" {
