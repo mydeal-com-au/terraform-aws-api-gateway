@@ -55,8 +55,10 @@ variable "routes" {
   }))
 
   validation {
-    for_each      = { for integration in var.routes : integration.name => integration }
-    condition     = each.value.integration_type == "HTTP" || each.value.integration_type == "HTTP_PROXY" || each.value.integration_type == "VPC_LINK" || each.value.integration_type == "AWS_PROXY"
+    condition = length([
+      for route in var.routes : true
+      if contains(["HTTP", "HTTP_PROXY", "AWS_PROXY", "VPC_LINK"], route.integration_type)
+    ]) == length(var.routes)
     error_message = "The integration_type must be HTTP, or HTTP_PROXY or VPC_LINK or AWS_PROXY"
   }
 }
