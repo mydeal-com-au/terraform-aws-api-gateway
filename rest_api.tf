@@ -68,27 +68,27 @@ resource "aws_api_gateway_resource" "rest_resource" {
   for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" }
   rest_api_id = aws_api_gateway_rest_api.rest_api[0].id
   parent_id   = aws_api_gateway_rest_api.rest_api[0].root_resource_id
-  path_part   = each.value.api_route_mapping
+  path_part   = each.value.route_mapping
 }
 
 resource "aws_api_gateway_method" "rest_method" {
   for_each      = { for integration in var.routes : integration.name => integration if var.api_type == "rest" }
   rest_api_id   = aws_api_gateway_rest_api.rest_api[0].id
   resource_id   = aws_api_gateway_resource.rest_resource[each.value.name].id
-  http_method   = each.value.integration_method
+  http_method   = each.value.method
   authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "integration" {
-  for_each                = { for integration in var.routes : integration.name => integration if var.api_type == "rest" }
+  for_each                = { for route in var.routes : route.name => route if var.api_type == "rest" }
   rest_api_id             = aws_api_gateway_rest_api.rest_api[0].id
   resource_id             = aws_api_gateway_resource.rest_resource[each.value.name].id
-  http_method             = each.value.integration_method
+  http_method             = each.value.method
   integration_http_method = aws_api_gateway_method.rest_method[each.value.name].http_method
   type                    = each.value.integration_type
   uri                     = each.value.integration_uri
 
-  connection_type = try(each.value.connection_type, "INTERNET")
+  connection_type = each.value.connection_type
   connection_id   = var.create_vpc_link ? aws_api_gateway_vpc_link.gateway_vpc_link[0].id : ""
 }
 resource "aws_lb" "integration_vpc_endpoint" {
@@ -96,7 +96,7 @@ resource "aws_lb" "integration_vpc_endpoint" {
   name               = "api-gateway-integration"
   internal           = true
   load_balancer_type = "network"
-  subnets            = [data.aws_subnets.private.ids]
+  subnets            = data.aws_subnets.private.ids
 }
 resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
   count       = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
@@ -106,7 +106,7 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
 }
 
 resource "aws_api_gateway_integration" "api_gateway_integration" {
-  for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && integration.integration_type == "vpc_link" }
+  for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && integration.integration_type == "VPC_LINK" }
   rest_api_id = aws_api_gateway_rest_api.rest_api[0].id
   resource_id = aws_api_gateway_resource.rest_resource[each.value.name].id
   http_method = aws_api_gateway_method.rest_method[each.value.name].http_method
@@ -127,4 +127,3 @@ resource "aws_api_gateway_integration" "api_gateway_integration" {
 #  protocol    = "TCP"
 #  vpc_id      = data.aws_vpc.current.id
 #}
-
