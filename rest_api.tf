@@ -89,6 +89,7 @@ resource "aws_api_gateway_integration" "integration" {
   integration_http_method = aws_api_gateway_method.rest_method[each.value.name].http_method
   type                    = each.value.integration_type
   uri                     = each.value.integration_uri
+  request_parameters = { for path_param in try(each.value.path_parameters, []) : "integration.request.path.${path_param}" => "method.request.path.${path_param}" }
 
   connection_type = each.value.connection_type
   connection_id   = var.create_vpc_link ? aws_api_gateway_vpc_link.gateway_vpc_link[0].id : ""
