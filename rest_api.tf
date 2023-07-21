@@ -94,7 +94,7 @@ resource "aws_api_gateway_integration" "integration" {
 
 resource "aws_lb" "integration_vpc_endpoint" {
   count              = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
-  name               = "${var.environment_name}-${var.name}-api-gateway-integration"
+  name               = "${var.environment_name}-${var.name}-gw"
   internal           = true
   load_balancer_type = "network"
   subnets            = data.aws_subnets.private.ids
