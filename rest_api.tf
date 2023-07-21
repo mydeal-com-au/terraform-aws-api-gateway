@@ -127,7 +127,7 @@ resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment" {
 
 resource "aws_lb_listener" "https" {
   count             = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
-  load_balancer_arn = aws_alb.integration_vpc_endpoint[0].arn
+  load_balancer_arn = aws_lb.integration_vpc_endpoint[0].arn
   port              = var.vpc_link_target_port
   protocol          = "TCP"
   default_action {
