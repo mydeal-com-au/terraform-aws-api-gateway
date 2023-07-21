@@ -1,7 +1,7 @@
 
 resource "aws_api_gateway_rest_api" "rest_api" {
   count = var.api_type == "rest" ? 1 : 0
-  name  = var.name
+  name  = "${var.environment_name}-${var.name}-api"
   endpoint_configuration {
     types = ["REGIONAL"]
   }
