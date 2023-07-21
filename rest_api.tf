@@ -13,7 +13,11 @@ resource "aws_api_gateway_deployment" "rest_deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api[0].id
 
   triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.rest_api[0].body))
+    redeployment = sha1(jsonencode(flatten([
+      [ for resource in var.routes : try(aws_api_gateway_resource.rest_resource[resource.name], {}) if var.api_type == "rest" && integration.name != "root" } ],
+      [ for method in var.routes : try(aws_api_gateway_method.rest_method[method.name], {}) if var.api_type == "rest" } ],
+      [ for integration in var.routes : try(aws_api_gateway_integration.integration[integration.name], {}) if var.api_type == "rest" } ]
+    ])))
   }
 
   lifecycle {
