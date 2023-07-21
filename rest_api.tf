@@ -109,11 +109,29 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
   target_arns = [aws_lb.integration_vpc_endpoint[0].arn]
 }
 
-#resource "aws_lb_target_group" "vpc_integration_tg" {
-#  for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && integration.integration_type == "vpc_link"}
-#  name        = "tf-example-lb-alb-tg"
-#  target_type = "alb"
-#  port        = 443
-#  protocol    = "TCP"
-#  vpc_id      = data.aws_vpc.current.id
-#}
+resource "aws_lb_target_group" "vpc_integration_tg" {
+  count        = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  name        = "tf-example-lb-alb-tg"
+  target_type = "alb"
+  port        = var.vpc_link_target_port
+  protocol    = "TCP"
+  vpc_id      = data.aws_vpc.current.id
+}
+
+resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment" {
+  count             = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  target_group_arn  = aws_lb_target_group.vpc_integration_tg[0].arn
+  target_id         = var.vpc_link_target_id
+  port              = var.vpc_link_target_port
+}
+
+resource "aws_lb_listener" "https" {
+  count             = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  load_balancer_arn = aws_alb.integration_vpc_endpoint[0].arn
+  port              = var.vpc_link_target_port
+  protocol          = "TCP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.vpc_integration_tg[0].arn
+  }
+}
