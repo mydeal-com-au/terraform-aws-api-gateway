@@ -63,6 +63,18 @@ variable "create_vpc_link" {
   default     = false
 }
 
+variable "vpc_link_target_id" {
+  description = "ARN of the resource to attach for the VPC link load balancer target"
+  type        = string
+  default     = ""
+}
+
+variable "vpc_link_target_port" {
+  description = "TCP Port of the resource to attach for the VPC link load balancer target"
+  type        = number
+  default     = 443
+}
+
 variable "create_api_key" {
   description = "Boolean variable that's evaluate the creation of an api key"
   type        = bool
