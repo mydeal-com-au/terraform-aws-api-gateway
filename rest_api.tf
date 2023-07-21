@@ -117,6 +117,11 @@ resource "aws_lb_target_group" "vpc_integration_tg" {
   port        = var.vpc_link_target_port
   protocol    = "TCP"
   vpc_id      = data.aws_vpc.current.id
+  health_check {
+    matcher  = "200"
+    path     = "/"
+    protocol = "HTTPS"
+  }
 }
 
 resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment" {
