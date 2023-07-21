@@ -78,10 +78,7 @@ resource "aws_api_gateway_method" "rest_method" {
   http_method   = each.value.method
   authorization = "NONE"
 
-  dynamic "request_parameters" {
-    count   = length(try(each.value.path_parameters, [])) > 0 ? 1 : 0
-    content = { for path_param in try(each.value.path_parameters, []) : "method.request.path.${path_param}" => true }
-  }
+  request_parameters = { for path_param in try(each.value.path_parameters, []) : "method.request.path.${path_param}" => true }
 }
 
 resource "aws_api_gateway_integration" "integration" {
