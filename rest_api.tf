@@ -14,9 +14,9 @@ resource "aws_api_gateway_deployment" "rest_deployment" {
 
   triggers = {
     redeployment = sha1(jsonencode(flatten([
-      [ for resource in var.routes : try(aws_api_gateway_resource.rest_resource[resource.name], {}) if var.api_type == "rest" && integration.name != "root" } ],
-      [ for method in var.routes : try(aws_api_gateway_method.rest_method[method.name], {}) if var.api_type == "rest" } ],
-      [ for integration in var.routes : try(aws_api_gateway_integration.integration[integration.name], {}) if var.api_type == "rest" } ]
+      [ for resource in var.routes : try(aws_api_gateway_resource.rest_resource[resource.name], {}) if var.api_type == "rest" && integration.name != "root" ],
+      [ for method in var.routes : try(aws_api_gateway_method.rest_method[method.name], {}) if var.api_type == "rest" ],
+      [ for integration in var.routes : try(aws_api_gateway_integration.integration[integration.name], {}) if var.api_type == "rest" ]
     ])))
   }
 
