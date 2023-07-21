@@ -111,7 +111,7 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
 
 resource "aws_lb_target_group" "vpc_integration_tg" {
   count        = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
-  name        = "tf-example-lb-alb-tg"
+  name        = "${var.environment_name}-${var.name}-tg"
   target_type = "alb"
   port        = var.vpc_link_target_port
   protocol    = "TCP"
