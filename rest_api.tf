@@ -65,7 +65,7 @@ resource "aws_api_gateway_rest_api_policy" "test" {
 #}
 
 resource "aws_api_gateway_resource" "rest_resource" {
-  for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" }
+  for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && integration.name != "root" }
   rest_api_id = aws_api_gateway_rest_api.rest_api[0].id
   parent_id   = aws_api_gateway_rest_api.rest_api[0].root_resource_id
   path_part   = each.value.route_mapping
@@ -74,15 +74,20 @@ resource "aws_api_gateway_resource" "rest_resource" {
 resource "aws_api_gateway_method" "rest_method" {
   for_each      = { for integration in var.routes : integration.name => integration if var.api_type == "rest" }
   rest_api_id   = aws_api_gateway_rest_api.rest_api[0].id
-  resource_id   = aws_api_gateway_resource.rest_resource[each.value.name].id
+  resource_id   = each.value.name == "root" ? aws_api_gateway_rest_api.rest_api[0].root_resource_id : aws_api_gateway_resource.rest_resource[each.value.name].id
   http_method   = each.value.method
   authorization = "NONE"
+
+  dynamic "request_parameters" {
+    count   = length(try(each.value.path_parameters, [])) > 0 ? 1 : 0
+    content = { for path_param in try(each.value.path_parameters, []) : "method.request.path.${path_param}" => true }
+  }
 }
 
 resource "aws_api_gateway_integration" "integration" {
   for_each                = { for route in var.routes : route.name => route if var.api_type == "rest" }
   rest_api_id             = aws_api_gateway_rest_api.rest_api[0].id
-  resource_id             = aws_api_gateway_resource.rest_resource[each.value.name].id
+  resource_id             = each.value.name == "root" ? aws_api_gateway_rest_api.rest_api[0].root_resource_id : aws_api_gateway_resource.rest_resource[each.value.name].id
   http_method             = each.value.method
   integration_http_method = aws_api_gateway_method.rest_method[each.value.name].http_method
   type                    = each.value.integration_type
