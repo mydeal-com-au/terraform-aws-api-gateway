@@ -42,6 +42,12 @@ variable "domains" {
   }))
 }
 
+variable "create_dns_record" {
+  description = "When enabled, creates the route53 record for the custom domain"
+  type        = bool
+  default     = true
+}
+
 variable "routes" {
   description = "Routes to be created in the API"
   default     = []
