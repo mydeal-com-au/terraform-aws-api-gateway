@@ -42,6 +42,12 @@ variable "domains" {
   }))
 }
 
+variable "create_dns_record" {
+  description = "When enabled, creates the route53 record for the custom domain"
+  type        = bool
+  default     = true
+}
+
 variable "routes" {
   description = "Routes to be created in the API"
   default     = []
@@ -51,6 +57,7 @@ variable "routes" {
     integration_type = string
     integration_uri  = string
     route_mapping    = string
+    path_parameters  = list(string)
     connection_type  = string
   }))
 
@@ -60,6 +67,18 @@ variable "create_vpc_link" {
   description = ""
   type        = bool
   default     = false
+}
+
+variable "vpc_link_target_id" {
+  description = "ARN of the resource to attach for the VPC link load balancer target"
+  type        = string
+  default     = ""
+}
+
+variable "vpc_link_target_port" {
+  description = "TCP Port of the resource to attach for the VPC link load balancer target"
+  type        = number
+  default     = 443
 }
 
 variable "create_api_key" {

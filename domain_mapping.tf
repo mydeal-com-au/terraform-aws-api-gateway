@@ -19,7 +19,7 @@ resource "aws_apigatewayv2_api_mapping" "domain_mapping" {
 }
 
 resource "aws_route53_record" "hosted_zone" {
-  for_each = { for domain in var.domains : domain.domain => domain if var.api_type == "http" }
+  for_each = { for domain in var.domains : domain.domain => domain if var.api_type == "http" && var.create_dns_record }
   name     = aws_apigatewayv2_domain_name.domain_name[each.value.domain].domain_name
   type     = "A"
   zone_id  = data.aws_route53_zone.hosted_zones[each.value.domain].id
@@ -50,7 +50,7 @@ resource "aws_api_gateway_base_path_mapping" "rest_api_mapping" {
 }
 
 resource "aws_route53_record" "rest_api_records" {
-  for_each = { for domain in var.domains : domain.domain => domain if var.api_type == "rest" }
+  for_each = { for domain in var.domains : domain.domain => domain if var.api_type == "rest" && var.create_dns_record }
   name     = aws_api_gateway_domain_name.rest_domain_name[each.value.domain].domain_name
   type     = "A"
   zone_id  = data.aws_route53_zone.hosted_zones[each.value.domain].id
