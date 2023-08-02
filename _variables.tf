@@ -131,3 +131,15 @@ variable "alarm_apigw_latency_threshold" {
   description = "Max threshold of latency(ms) allowed in a 5 minutes interval"
   default     = 1000
 }
+
+variable "vpc_link_subnets" {
+  description = "subnets for vpc link load balancer"
+  default     = []
+  type = list(string)
+}
+
+variable "vpc_id" {
+  description = "vpc for load balancer"
+  default     = ""
+  type = string
+}

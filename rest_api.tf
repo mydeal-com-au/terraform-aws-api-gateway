@@ -104,7 +104,7 @@ resource "aws_lb" "integration_vpc_endpoint" {
   name               = "${var.environment_name}-${var.name}-gw"
   internal           = true
   load_balancer_type = "network"
-  subnets            = data.aws_subnets.private.ids
+  subnets            = var.vpc_link_subnets
 }
 
 resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
@@ -120,7 +120,7 @@ resource "aws_lb_target_group" "vpc_integration_tg" {
   target_type = "alb"
   port        = var.vpc_link_target_port
   protocol    = "TCP"
-  vpc_id      = data.aws_vpc.current.id
+  vpc_id      = var.vpc_id
   health_check {
     matcher  = "200"
     path     = "/"
