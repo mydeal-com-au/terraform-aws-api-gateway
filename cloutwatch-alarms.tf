@@ -3,11 +3,12 @@ resource "aws_cloudwatch_metric_alarm" "apigw_5xx_errors" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-5xx-errors"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "2"
+  evaluation_periods        = "1"
+  datapoints_to_alarm       = "1"
   metric_name               = "5XXError"
   namespace                 = "AWS/ApiGateway"
   period                    = "300"
-  statistic                 = "Maximum"
+  statistic                 = "Sum"
   threshold                 = var.alarm_apigw_5xx_errors_threshold
   alarm_description         = "Number of 5xx errors at ${var.name} API Gateway above threshold"
   alarm_actions             = var.alarm_sns_topics
@@ -26,11 +27,12 @@ resource "aws_cloudwatch_metric_alarm" "apigw_4xx_errors" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-4xx-errors"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "2"
+  evaluation_periods        = "1"
+  datapoints_to_alarm       = "1"
   metric_name               = "4XXError"
   namespace                 = "AWS/ApiGateway"
   period                    = "300"
-  statistic                 = "Maximum"
+  statistic                 = "Sum"
   threshold                 = var.alarm_apigw_4xx_errors_threshold
   alarm_description         = "Number of 400 errors at ${var.name} API Gateway above threshold"
   alarm_actions             = var.alarm_sns_topics
@@ -49,7 +51,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_integration_latency" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-integration-latency"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "2"
+  evaluation_periods        = "1"
+  datapoints_to_alarm       = "1"
   metric_name               = "IntegrationLatency"
   namespace                 = "AWS/ApiGateway"
   period                    = "300"
@@ -72,7 +75,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_latency" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-latency"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "2"
+  evaluation_periods        = "1"
+  datapoints_to_alarm       = "1"
   metric_name               = "Latency"
   namespace                 = "AWS/ApiGateway"
   period                    = "300"
