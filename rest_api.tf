@@ -5,7 +5,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-
+  binary_media_types = var.binary_media_types
 }
 
 resource "aws_api_gateway_deployment" "rest_deployment" {

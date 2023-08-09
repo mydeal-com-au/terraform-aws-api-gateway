@@ -143,3 +143,9 @@ variable "vpc_id" {
   default     = ""
   type = string
 }
+
+variable "binary_media_types" {
+  description = "binary media types for the rest api"
+  default     = []
+  type = list(string)
+}
