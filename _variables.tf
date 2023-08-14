@@ -144,6 +144,13 @@ variable "vpc_id" {
   type = string
 }
 
+variable "vpc_link_id" {
+  description = "vpc link id for the api gateway integration"
+  default     = ""
+  type = string
+}
+
+
 variable "binary_media_types" {
   description = "binary media types for the rest api"
   default     = []

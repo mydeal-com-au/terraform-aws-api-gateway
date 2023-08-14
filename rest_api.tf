@@ -97,7 +97,7 @@ resource "aws_api_gateway_integration" "integration" {
   request_parameters = { for path_param in try(each.value.path_parameters, []) : "integration.request.path.${path_param}" => "method.request.path.${path_param}" }
 
   connection_type = each.value.connection_type
-  connection_id   = var.create_vpc_link ? aws_api_gateway_vpc_link.gateway_vpc_link[0].id : ""
+  connection_id   = each.value.connection_type == "VPC_LINK" ? try(aws_api_gateway_vpc_link.gateway_vpc_link[0].id, var.vpc_link_id) : ""
 }
 
 resource "aws_lb" "integration_vpc_endpoint" {
