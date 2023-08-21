@@ -156,3 +156,9 @@ variable "binary_media_types" {
   default     = []
   type = list(string)
 }
+
+variable "web_acl_arn" {
+  description = "regional waf acl arn, attached to the rest api endpoint"
+  default     = ""
+  type = string
+}

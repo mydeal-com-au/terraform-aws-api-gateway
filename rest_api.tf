@@ -62,12 +62,12 @@ resource "aws_api_gateway_rest_api_policy" "test" {
   policy      = data.aws_iam_policy_document.ip_resource_policy[0].json
 }
 
-#
-#resource "aws_wafv2_web_acl_association" "rest_waf_association" {
-#  count       = var.api_type == "rest" && length(var.web_acl_arn) > 0 ? 1 : 0
-#  resource_arn  = aws_api_gateway_stage.rest_stage[var.name].arn
-#  web_acl_arn   = var.web_acl_arn
-#}
+
+resource "aws_wafv2_web_acl_association" "rest_waf_association" {
+  count       = var.api_type == "rest" && length(var.web_acl_arn) > 0 ? 1 : 0
+  resource_arn  = aws_api_gateway_stage.rest_stage[0].arn
+  web_acl_arn   = var.web_acl_arn
+}
 
 resource "aws_api_gateway_resource" "rest_resource" {
   for_each    = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && integration.name != "root" }
