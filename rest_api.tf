@@ -64,7 +64,7 @@ resource "aws_api_gateway_rest_api_policy" "test" {
 
 
 resource "aws_wafv2_web_acl_association" "rest_waf_association" {
-  count       = var.api_type == "rest" && length(var.web_acl_arn) > 0 ? 1 : 0
+  count       = var.api_type == "rest" && var.attach_waf > 0 ? 1 : 0
   resource_arn  = aws_api_gateway_stage.rest_stage[0].arn
   web_acl_arn   = var.web_acl_arn
 }

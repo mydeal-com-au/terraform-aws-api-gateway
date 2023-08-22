@@ -162,3 +162,9 @@ variable "web_acl_arn" {
   default     = ""
   type = string
 }
+
+variable "attach_waf" {
+  description = "attach waf to the rest api endpoint"
+  default     = false
+  type = bool
+}
