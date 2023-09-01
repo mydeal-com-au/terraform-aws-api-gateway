@@ -124,7 +124,7 @@ resource "aws_lb_target_group" "vpc_integration_tg" {
   vpc_id      = var.vpc_id
   health_check {
     matcher  = "200"
-    path     = "/"
+    path     = var.vpc_link_target_health_check_path
     protocol = "HTTPS"
   }
 }

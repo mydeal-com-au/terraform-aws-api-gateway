@@ -81,6 +81,12 @@ variable "vpc_link_target_port" {
   default     = 443
 }
 
+variable "vpc_link_target_health_check_path" {
+  description = "VPC link load balancer target health check path"
+  type        = string
+  default     = "/"
+}
+
 variable "create_api_key" {
   description = "Boolean variable that's evaluate the creation of an api key"
   type        = bool
