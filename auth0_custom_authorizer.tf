@@ -74,8 +74,9 @@ resource "aws_lambda_function" "authorizer" {
 
   environment {
     variables = {
-      AUDIENCE = ""
-      JWKS_URI = ""
+      JWKS_URI     = each.value.jwks_uri
+      AUDIENCE     = each.value.audience
+      TOKEN_ISSUER = each.value.token_issuer
     }
   }
 }
