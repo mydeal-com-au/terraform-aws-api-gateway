@@ -109,6 +109,9 @@ variable "custom_authorizers" {
   type = list(object({
     name                          = string
     custom_authorizer_lambda_code = string
+    jwks_uri                      = string
+    audience                      = string
+    token_issuer                  = string
   }))
 
 }
@@ -141,36 +144,36 @@ variable "alarm_apigw_latency_threshold" {
 variable "vpc_link_subnets" {
   description = "subnets for vpc link load balancer"
   default     = []
-  type = list(string)
+  type        = list(string)
 }
 
 variable "vpc_id" {
   description = "vpc for load balancer"
   default     = ""
-  type = string
+  type        = string
 }
 
 variable "vpc_link_id" {
   description = "vpc link id for the api gateway integration"
   default     = ""
-  type = string
+  type        = string
 }
 
 
 variable "binary_media_types" {
   description = "binary media types for the rest api"
   default     = []
-  type = list(string)
+  type        = list(string)
 }
 
 variable "web_acl_arn" {
   description = "regional waf acl arn, attached to the rest api endpoint"
   default     = ""
-  type = string
+  type        = string
 }
 
 variable "attach_waf" {
   description = "attach waf to the rest api endpoint"
   default     = false
-  type = bool
+  type        = bool
 }
