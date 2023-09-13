@@ -85,13 +85,7 @@ data "aws_iam_policy" "lambda_base_role" {
   name = "AWSLambdaBasicExecutionRole"
 }
 
-
-locals {
-  lambda_default_role_policy = [data.aws_iam_policy.lambda_base_role.arn]
-}
-
 resource "aws_iam_role_policy_attachment" "lambda_default_role_policy" {
-  for_each   = toset(local.lambda_default_role_policy)
-  role       = aws_iam_role.lambda.name
-  policy_arn = each.key
+  role       = aws_iam_role.lambda[0].name
+  policy_arn = data.aws_iam_policy.lambda_base_role.arn
 }
