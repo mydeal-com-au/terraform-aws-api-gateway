@@ -86,6 +86,7 @@ data "aws_iam_policy" "lambda_base_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_default_role_policy" {
-  role       = aws_iam_role.lambda[0].name
+  for_each   = { for custom_authorizer in var.custom_authorizers : custom_authorizer.name => custom_authorizer if var.api_type == "rest" }
+  role       = aws_iam_role.lambda[each.value.name].name
   policy_arn = data.aws_iam_policy.lambda_base_role.arn
 }
