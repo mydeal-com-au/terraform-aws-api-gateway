@@ -103,6 +103,11 @@ variable "allowed_ips" {
   default     = []
 }
 
+variable "enable_custom_authorizer" {
+  type    = bool
+  default = false
+}
+
 variable "custom_authorizers" {
   description = "Custom authorizer variables"
   default     = []
