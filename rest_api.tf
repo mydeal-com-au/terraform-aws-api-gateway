@@ -14,10 +14,10 @@ resource "aws_api_gateway_deployment" "rest_deployment" {
 
   triggers = {
     redeployment = sha1(jsonencode(flatten([
-      [ for resource in var.routes : try(aws_api_gateway_resource.rest_resource[resource.name], {}) if var.api_type == "rest" && resource.name != "root" ],
-      [ for method in var.routes : try(aws_api_gateway_method.rest_method[method.name], {}) if var.api_type == "rest" ],
-      [ for integration in var.routes : try(aws_api_gateway_integration.integration[integration.name], {}) if var.api_type == "rest" ],
-      [ try(aws_api_gateway_rest_api.rest_api, {}) ]
+      [for resource in var.routes : try(aws_api_gateway_resource.rest_resource[resource.name], {}) if var.api_type == "rest" && resource.name != "root"],
+      [for method in var.routes : try(aws_api_gateway_method.rest_method[method.name], {}) if var.api_type == "rest"],
+      [for integration in var.routes : try(aws_api_gateway_integration.integration[integration.name], {}) if var.api_type == "rest"],
+      [try(aws_api_gateway_rest_api.rest_api, {})]
     ])))
   }
 
@@ -64,9 +64,9 @@ resource "aws_api_gateway_rest_api_policy" "test" {
 
 
 resource "aws_wafv2_web_acl_association" "rest_waf_association" {
-  count       = var.api_type == "rest" && var.attach_waf ? 1 : 0
-  resource_arn  = aws_api_gateway_stage.rest_stage[0].arn
-  web_acl_arn   = var.web_acl_arn
+  count        = var.api_type == "rest" && var.attach_waf ? 1 : 0
+  resource_arn = aws_api_gateway_stage.rest_stage[0].arn
+  web_acl_arn  = var.web_acl_arn
 }
 
 resource "aws_api_gateway_resource" "rest_resource" {
@@ -94,7 +94,7 @@ resource "aws_api_gateway_integration" "integration" {
   integration_http_method = aws_api_gateway_method.rest_method[each.value.name].http_method
   type                    = each.value.integration_type
   uri                     = each.value.integration_uri
-  request_parameters = { for path_param in try(each.value.path_parameters, []) : "integration.request.path.${path_param}" => "method.request.path.${path_param}" }
+  request_parameters      = { for path_param in try(each.value.path_parameters, []) : "integration.request.path.${path_param}" => "method.request.path.${path_param}" }
 
   connection_type = each.value.connection_type
   connection_id   = each.value.connection_type == "VPC_LINK" ? try(aws_api_gateway_vpc_link.gateway_vpc_link[0].id, var.vpc_link_id) : ""
@@ -116,7 +116,7 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
 }
 
 resource "aws_lb_target_group" "vpc_integration_tg" {
-  count        = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  count       = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
   name        = "${var.environment_name}-${var.name}-tg"
   target_type = "alb"
   port        = var.vpc_link_target_port
@@ -130,10 +130,10 @@ resource "aws_lb_target_group" "vpc_integration_tg" {
 }
 
 resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment" {
-  count             = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
-  target_group_arn  = aws_lb_target_group.vpc_integration_tg[0].arn
-  target_id         = var.vpc_link_target_id
-  port              = var.vpc_link_target_port
+  count            = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  target_group_arn = aws_lb_target_group.vpc_integration_tg[0].arn
+  target_id        = var.vpc_link_target_id
+  port             = var.vpc_link_target_port
 }
 
 resource "aws_lb_listener" "https" {

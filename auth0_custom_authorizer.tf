@@ -1,10 +1,11 @@
 resource "aws_api_gateway_authorizer" "rest_authorizer" {
   for_each = { for custom_authorizer in var.custom_authorizers : custom_authorizer.name => custom_authorizer if var.api_type == "rest" }
 
-  name                   = each.value.name
-  rest_api_id            = aws_api_gateway_rest_api.rest_api[0].id
-  authorizer_uri         = aws_lambda_function.authorizer[each.value.name].invoke_arn
-  authorizer_credentials = aws_iam_role.invocation_role[each.value.name].arn
+  name                           = each.value.name
+  rest_api_id                    = aws_api_gateway_rest_api.rest_api[0].id
+  authorizer_uri                 = aws_lambda_function.authorizer[each.value.name].invoke_arn
+  authorizer_credentials         = aws_iam_role.invocation_role[each.value.name].arn
+  identity_validation_expression = "^Bearer [-0-9a-zA-z\\.]*$"
 }
 
 resource "aws_iam_role" "invocation_role" {
