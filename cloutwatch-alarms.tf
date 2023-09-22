@@ -41,7 +41,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_4xx_errors" {
   treat_missing_data        = "ignore"
 
   dimensions = {
-    ApiId = var.api_type == "http" ? aws_apigatewayv2_api.api[0].id : aws_api_gateway_rest_api.rest_api[0].id
+    ApiName = var.api_type == "http" ? aws_apigatewayv2_api.api[0].name : aws_api_gateway_rest_api.rest_api[0].name
     Stage = var.api_type == "http" ? aws_apigatewayv2_stage.stage[0].name : aws_api_gateway_stage.rest_stage[0].stage_name
   }
 }
@@ -65,7 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_integration_latency" {
   treat_missing_data        = "ignore"
 
   dimensions = {
-    ApiId = var.api_type == "http" ? aws_apigatewayv2_api.api[0].id : aws_api_gateway_rest_api.rest_api[0].id
+    ApiName = var.api_type == "http" ? aws_apigatewayv2_api.api[0].name : aws_api_gateway_rest_api.rest_api[0].name
     Stage = var.api_type == "http" ? aws_apigatewayv2_stage.stage[0].name : aws_api_gateway_stage.rest_stage[0].stage_name
   }
 }
@@ -89,7 +89,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_latency" {
   treat_missing_data        = "ignore"
 
   dimensions = {
-    ApiId = var.api_type == "http" ? aws_apigatewayv2_api.api[0].id : aws_api_gateway_rest_api.rest_api[0].id
+    ApiName = var.api_type == "http" ? aws_apigatewayv2_api.api[0].name : aws_api_gateway_rest_api.rest_api[0].name
     Stage = var.api_type == "http" ? aws_apigatewayv2_stage.stage[0].name : aws_api_gateway_stage.rest_stage[0].stage_name
   }
 }
