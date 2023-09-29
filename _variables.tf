@@ -59,8 +59,8 @@ variable "routes" {
     route_mapping    = string
     path_parameters  = list(string)
     connection_type  = string
+    authorization    = bool
   }))
-
 }
 
 variable "create_vpc_link" {

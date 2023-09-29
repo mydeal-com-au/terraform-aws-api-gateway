@@ -81,9 +81,8 @@ resource "aws_api_gateway_method" "rest_method" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api[0].id
   resource_id   = each.value.name == "root" ? aws_api_gateway_rest_api.rest_api[0].root_resource_id : aws_api_gateway_resource.rest_resource[each.value.name].id
   http_method   = each.value.method
-  authorization = var.enable_custom_authorizer ? "CUSTOM" : "NONE"
-  authorizer_id = var.enable_custom_authorizer ? aws_api_gateway_authorizer.rest_authorizer[var.custom_authorizers[0].name].id : null
-
+  authorization = coalesce(each.value.authorization, var.enable_custom_authorizer ? "CUSTOM" : "NONE")
+  authorizer_id = coalesce(each.value.authorization, var.enable_custom_authorizer ? aws_api_gateway_authorizer.rest_authorizer[var.custom_authorizers[0].name].id : null)
   request_parameters = { for path_param in try(each.value.path_parameters, []) : "method.request.path.${path_param}" => true }
 }
 
