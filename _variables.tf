@@ -113,6 +113,7 @@ variable "custom_authorizers" {
   default     = []
   type = list(object({
     name                          = string
+    runtime                       = string
     custom_authorizer_lambda_code = string
     jwks_uri                      = string
     audience                      = string
