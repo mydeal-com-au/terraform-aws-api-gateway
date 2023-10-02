@@ -71,7 +71,7 @@ resource "aws_lambda_function" "authorizer" {
   role             = aws_iam_role.lambda[each.value.name].arn
   handler          = "index.handler"
   source_code_hash = filebase64sha256(each.value.custom_authorizer_lambda_code)
-  runtime          = "nodejs16.x"
+  runtime          = each.value.runtime
 
   environment {
     variables = {
