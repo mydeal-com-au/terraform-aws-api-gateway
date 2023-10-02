@@ -21,3 +21,13 @@ output "api_gateway_rest_api_root_resource_id" {
   value       = aws_api_gateway_rest_api.rest_api[0].root_resource_id
   description = "root resource id of rest api"
 }
+
+output "api_gateway_rest_api_vpc_link_id" {
+  value       = aws_api_gateway_vpc_link.gateway_vpc_link[0].id
+  description = "vpc link id of rest api"
+}
+
+output "api_gateway_authorizer_id" {
+  value       = aws_api_gateway_authorizer.rest_authorizer[var.custom_authorizers[0].name].id
+  description = "authorizer id of rest api"
+}
