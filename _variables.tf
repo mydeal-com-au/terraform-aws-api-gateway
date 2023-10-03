@@ -183,3 +183,8 @@ variable "attach_waf" {
   default     = false
   type        = bool
 }
+
+variable "redeployment_sha" {
+  default = ""
+  type    = string
+}
