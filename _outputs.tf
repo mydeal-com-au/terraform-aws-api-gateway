@@ -23,7 +23,7 @@ output "api_gateway_rest_api_root_resource_id" {
 }
 
 output "api_gateway_rest_api_vpc_link_id" {
-  value       = aws_api_gateway_vpc_link.gateway_vpc_link[0].id
+  value       = var.api_type == "rest" && var.create_vpc_link ? aws_api_gateway_vpc_link.gateway_vpc_link[0].id : ""
   description = "vpc link id of rest api"
 }
 
