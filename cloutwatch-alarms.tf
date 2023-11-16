@@ -27,8 +27,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_4xx_errors" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-4xx-errors"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
-  datapoints_to_alarm       = "1"
+  evaluation_periods        = "2"
+  datapoints_to_alarm       = "2"
   metric_name               = "4XXError"
   namespace                 = "AWS/ApiGateway"
   period                    = "300"
@@ -51,8 +51,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_integration_latency" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-integration-latency"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
-  datapoints_to_alarm       = "1"
+  evaluation_periods        = "2"
+  datapoints_to_alarm       = "2"
   metric_name               = "IntegrationLatency"
   namespace                 = "AWS/ApiGateway"
   period                    = "300"
@@ -75,8 +75,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_latency" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-latency"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
-  datapoints_to_alarm       = "1"
+  evaluation_periods        = "2"
+  datapoints_to_alarm       = "2"
   metric_name               = "Latency"
   namespace                 = "AWS/ApiGateway"
   period                    = "300"
