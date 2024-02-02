@@ -147,6 +147,26 @@ variable "alarm_apigw_latency_threshold" {
   default     = 1000
 }
 
+variable "alarm_apigw_integration_latency_evaluation" {
+  description = "Api Gateway integration latency evaluation periods"
+  default     = 2
+}
+
+variable "alarm_apigw_integration_latency_datapoints" {
+  description = "Api Gateway integration latency data points to evaluate"
+  default     = 2
+}
+
+variable "alarm_apigw_latency_evaluation" {
+  description = "Api Gateway latency evaluation periods"
+  default     = 2
+}
+
+variable "alarm_apigw_latency_datapoints" {
+  description = "Api Gateway latency data points to evaluate"
+  default     = 2
+}
+
 variable "vpc_link_subnets" {
   description = "subnets for vpc link load balancer"
   default     = []
