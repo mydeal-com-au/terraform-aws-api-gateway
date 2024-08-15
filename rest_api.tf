@@ -118,7 +118,7 @@ resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
 }
 
 resource "aws_lb_target_group" "vpc_integration_tg" {
-  count       = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  count       = var.api_type == "rest" && var.vpc_target_type == "alb" && var.create_vpc_link ? 1 : 0
   name        = "${var.environment_name}-${var.name}-tg"
   target_type = "alb"
   port        = var.vpc_link_target_port
@@ -132,19 +132,42 @@ resource "aws_lb_target_group" "vpc_integration_tg" {
 }
 
 resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment" {
-  count            = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  count            = var.api_type == "rest" && var.vpc_target_type == "alb" && var.create_vpc_link ? 1 : 0
   target_group_arn = aws_lb_target_group.vpc_integration_tg[0].arn
   target_id        = var.vpc_link_target_id
   port             = var.vpc_link_target_port
 }
 
 resource "aws_lb_listener" "https" {
-  count             = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  count             = var.api_type == "rest" && var.vpc_target_type == "alb" && var.create_vpc_link ? 1 : 0
   load_balancer_arn = aws_lb.integration_vpc_endpoint[0].arn
   port              = var.vpc_link_target_port
   protocol          = "TCP"
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.vpc_integration_tg[0].arn
+  }
+}
+
+resource "aws_lb_target_group" "vpc_integration_tg_lambda" {
+  count       = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
+  name        = "${var.environment_name}-${var.name}-tg"
+  target_type = "lambda"
+}
+
+resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment_lambda" {
+  count            = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
+  target_group_arn = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
+  target_id        = var.vpc_link_target_id
+}
+
+resource "aws_lb_listener" "https_lambda" {
+  count             = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
+  load_balancer_arn = aws_lb.integration_vpc_endpoint[0].arn
+  port              = var.vpc_link_target_port
+  protocol          = "TCP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
   }
 }
