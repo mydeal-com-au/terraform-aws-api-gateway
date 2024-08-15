@@ -69,6 +69,12 @@ variable "create_vpc_link" {
   default     = false
 }
 
+variable "vpc_target_type" {
+  description = "The type of target for the vpc link"
+  type        = string
+  default     = "alb"
+}
+
 variable "vpc_link_target_id" {
   description = "ARN of the resource to attach for the VPC link load balancer target"
   type        = string
