@@ -137,7 +137,11 @@ variable "custom_authorizers" {
     audience                      = string
     token_issuer                  = string
   }))
+}
 
+variable "api_key_required" {
+  type    = bool
+  default = false
 }
 
 variable "alarm_sns_topics" {
