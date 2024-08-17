@@ -160,7 +160,7 @@ resource "aws_api_gateway_integration" "integration_lambda" {
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {
-  count         = var.api_type == "rest" && var.target_type == "lambda" && var.create_vpc_link ? 1 : 0
+  count         = var.api_type == "rest" && var.target_type == "lambda"
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = "${var.environment_name}-${var.lambda_name}"
