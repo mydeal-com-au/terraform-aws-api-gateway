@@ -163,7 +163,7 @@ resource "aws_lambda_permission" "apigw_lambda" {
   for_each      = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && var.target_type == "lambda" }
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = var.lambda_name
+  function_name = "${var.environment_name}-${var.lambda_name}"
   principal     = "apigateway.amazonaws.com"
 
   # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
