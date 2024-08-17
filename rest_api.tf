@@ -89,7 +89,7 @@ resource "aws_api_gateway_method" "rest_method" {
 }
 
 resource "aws_api_gateway_integration" "integration" {
-  for_each                = { for route in var.routes : route.name => route if var.api_type == "rest" }
+  for_each                = { for route in var.routes : route.name => route if var.api_type == "rest" && var.target_type == "alb" }
   rest_api_id             = aws_api_gateway_rest_api.rest_api[0].id
   resource_id             = each.value.name == "root" ? aws_api_gateway_rest_api.rest_api[0].root_resource_id : aws_api_gateway_resource.rest_resource[each.value.name].id
   http_method             = each.value.method
@@ -103,7 +103,7 @@ resource "aws_api_gateway_integration" "integration" {
 }
 
 resource "aws_lb" "integration_vpc_endpoint" {
-  count              = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  count              = var.api_type == "rest" && var.target_type == "alb" && var.create_vpc_link ? 1 : 0
   name               = "${var.environment_name}-${var.name}-gw"
   internal           = true
   load_balancer_type = "network"
@@ -111,14 +111,14 @@ resource "aws_lb" "integration_vpc_endpoint" {
 }
 
 resource "aws_api_gateway_vpc_link" "gateway_vpc_link" {
-  count       = var.api_type == "rest" && var.create_vpc_link ? 1 : 0
+  count       = var.api_type == "rest" && var.target_type == "alb" && var.create_vpc_link ? 1 : 0
   name        = "${var.environment_name}-${var.name}-vpclink"
   description = "${var.environment_name}-${var.name} API Gateway VPC LINK"
   target_arns = [aws_lb.integration_vpc_endpoint[0].arn]
 }
 
 resource "aws_lb_target_group" "vpc_integration_tg" {
-  count       = var.api_type == "rest" && var.vpc_target_type == "alb" && var.create_vpc_link ? 1 : 0
+  count       = var.api_type == "rest" && var.target_type == "alb" && var.create_vpc_link ? 1 : 0
   name        = "${var.environment_name}-${var.name}-tg"
   target_type = "alb"
   port        = var.vpc_link_target_port
@@ -132,14 +132,14 @@ resource "aws_lb_target_group" "vpc_integration_tg" {
 }
 
 resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment" {
-  count            = var.api_type == "rest" && var.vpc_target_type == "alb" && var.create_vpc_link ? 1 : 0
+  count            = var.api_type == "rest" && var.target_type == "alb" && var.create_vpc_link ? 1 : 0
   target_group_arn = aws_lb_target_group.vpc_integration_tg[0].arn
   target_id        = var.vpc_link_target_id
   port             = var.vpc_link_target_port
 }
 
 resource "aws_lb_listener" "https" {
-  count             = var.api_type == "rest" && var.vpc_target_type == "alb" && var.create_vpc_link ? 1 : 0
+  count             = var.api_type == "rest" && var.target_type == "alb" && var.create_vpc_link ? 1 : 0
   load_balancer_arn = aws_lb.integration_vpc_endpoint[0].arn
   port              = var.vpc_link_target_port
   protocol          = "TCP"
@@ -149,35 +149,23 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-resource "aws_lambda_permission" "with_lb" {
-  count         = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
-  statement_id  = "AllowExecutionFromlb"
+resource "aws_api_gateway_integration" "integration_lambda" {
+  for_each                = { for route in var.routes : route.name => route if var.api_type == "rest" && var.target_type == "lambda" }
+  rest_api_id             = aws_api_gateway_rest_api.rest_api[0].id
+  resource_id             = each.value.name == "root" ? aws_api_gateway_rest_api.rest_api[0].root_resource_id : aws_api_gateway_resource.rest_resource[each.value.name].id
+  http_method             = each.value.method
+  integration_http_method = aws_api_gateway_method.rest_method[each.value.name].http_method
+  type                    = each.value.integration_type
+  uri                     = each.value.integration_uri
+}
+
+resource "aws_lambda_permission" "apigw_lambda" {
+  for_each      = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && var.vpc_target_type == "lambda" }
+  statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = try(var.vpc_link_target_name, "")
-  principal     = "elasticloadbalancing.amazonaws.com"
-  source_arn    = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
-}
+  function_name = var.lambda_name
+  principal     = "apigateway.amazonaws.com"
 
-resource "aws_lb_target_group" "vpc_integration_tg_lambda" {
-  count       = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
-  name        = "${var.environment_name}-${var.name}-tg"
-  target_type = "lambda"
-}
-
-resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment_lambda" {
-  count            = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
-  target_group_arn = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
-  target_id        = var.vpc_link_target_id
-  depends_on       = [aws_lambda_permission.with_lb[0]]
-}
-
-resource "aws_lb_listener" "https_lambda" {
-  count             = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
-  load_balancer_arn = aws_lb.integration_vpc_endpoint[0].arn
-  port              = try(var.vpc_link_target_port, 443)
-  protocol          = "TCP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
-  }
+  # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+  source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.rest_api[0].id}/*/${aws_api_gateway_method.rest_method[each.key].http_method}${(integration.name != "root" ? aws_api_gateway_resource.rest_resource[each.key].path : "")}"
 }
