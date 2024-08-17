@@ -57,8 +57,8 @@ variable "routes" {
     integration_type = string
     integration_uri  = string
     route_mapping    = string
-    path_parameters  = list(string)
-    connection_type  = string
+    path_parameters  = optional(list(string))
+    connection_type  = optional(string)
   }))
 
 }
