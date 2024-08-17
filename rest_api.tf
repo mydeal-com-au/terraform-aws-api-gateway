@@ -155,7 +155,7 @@ resource "aws_lambda_permission" "with_lb" {
   action        = "lambda:InvokeFunction"
   function_name = try(var.vpc_link_target_name, "")
   principal     = "elasticloadbalancing.amazonaws.com"
-  source_arn    = aws_lb_target_group.vpc_integration_tg_lambda.arn
+  source_arn    = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
 }
 
 resource "aws_lb_target_group" "vpc_integration_tg_lambda" {
@@ -168,7 +168,7 @@ resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment_lambda"
   count            = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
   target_group_arn = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
   target_id        = var.vpc_link_target_id
-  depends_on       = [aws_lambda_permission.with_lb]
+  depends_on       = [aws_lambda_permission.with_lb[0]]
 }
 
 resource "aws_lb_listener" "https_lambda" {
