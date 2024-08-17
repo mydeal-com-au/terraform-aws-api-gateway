@@ -149,6 +149,15 @@ resource "aws_lb_listener" "https" {
   }
 }
 
+resource "aws_lambda_permission" "with_lb" {
+  count         = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
+  statement_id  = "AllowExecutionFromlb"
+  action        = "lambda:InvokeFunction"
+  function_name = try(var.vpc_link_target_name, "")
+  principal     = "elasticloadbalancing.amazonaws.com"
+  source_arn    = aws_lb_target_group.vpc_integration_tg_lambda.arn
+}
+
 resource "aws_lb_target_group" "vpc_integration_tg_lambda" {
   count       = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
   name        = "${var.environment_name}-${var.name}-tg"
@@ -164,7 +173,7 @@ resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment_lambda"
 resource "aws_lb_listener" "https_lambda" {
   count             = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
   load_balancer_arn = aws_lb.integration_vpc_endpoint[0].arn
-  port              = var.vpc_link_target_port
+  port              = try(var.vpc_link_target_port, 443)
   protocol          = "TCP"
   default_action {
     type             = "forward"
