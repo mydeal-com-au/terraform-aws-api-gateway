@@ -81,6 +81,12 @@ variable "vpc_link_target_id" {
   default     = ""
 }
 
+variable "vpc_link_target_name" {
+  description = "Name of the resource to attach for the VPC link load balancer target"
+  type        = string
+  default     = ""
+}
+
 variable "vpc_link_target_port" {
   description = "TCP Port of the resource to attach for the VPC link load balancer target"
   type        = number
