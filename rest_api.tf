@@ -85,7 +85,7 @@ resource "aws_api_gateway_method" "rest_method" {
   authorization = var.enable_custom_authorizer ? "CUSTOM" : "NONE"
   authorizer_id = var.enable_custom_authorizer ? aws_api_gateway_authorizer.rest_authorizer[var.custom_authorizers[0].name].id : null
 
-  request_parameters = { for path_param in try(each.value.path_parameters, []) : "method.request.path.${path_param}" => true }
+  request_parameters = { for path_param in try(coalesce(each.value.path_parameters, []), []) : "method.request.path.${path_param}" => true }
 }
 
 resource "aws_api_gateway_integration" "integration" {
