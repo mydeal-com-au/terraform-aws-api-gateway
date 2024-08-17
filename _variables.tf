@@ -69,10 +69,16 @@ variable "create_vpc_link" {
   default     = false
 }
 
-variable "vpc_target_type" {
-  description = "The type of target for the vpc link"
+variable "target_type" {
+  description = "The type of target for the rest api integration"
   type        = string
   default     = "alb"
+}
+
+variable "lambda_name" {
+  description = "The integration lambda (if lambda integration type) for permissions"
+  type        = string
+  default     = ""
 }
 
 variable "vpc_link_target_id" {
