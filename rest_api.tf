@@ -168,6 +168,7 @@ resource "aws_lb_target_group_attachment" "vpc_integration_tg_attachment_lambda"
   count            = var.api_type == "rest" && var.vpc_target_type == "lambda" && var.create_vpc_link ? 1 : 0
   target_group_arn = aws_lb_target_group.vpc_integration_tg_lambda[0].arn
   target_id        = var.vpc_link_target_id
+  depends_on       = [aws_lambda_permission.with_lb]
 }
 
 resource "aws_lb_listener" "https_lambda" {
