@@ -160,12 +160,12 @@ resource "aws_api_gateway_integration" "integration_lambda" {
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {
-  for_each      = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && var.vpc_target_type == "lambda" }
+  for_each      = { for integration in var.routes : integration.name => integration if var.api_type == "rest" && var.target_type == "lambda" }
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_name
   principal     = "apigateway.amazonaws.com"
 
   # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
-  source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.rest_api[0].id}/*/${aws_api_gateway_method.rest_method[each.key].http_method}${(integration.name != "root" ? aws_api_gateway_resource.rest_resource[each.key].path : "")}"
+  source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.rest_api[0].id}/*/${aws_api_gateway_method.rest_method[each.key].http_method}${(each.key != "root" ? aws_api_gateway_resource.rest_resource[each.key].path : "")}"
 }
