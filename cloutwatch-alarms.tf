@@ -116,7 +116,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_latency" {
   count = length(var.alarm_sns_topics) > 0 ? 1 : 0
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-latency"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  comparison_operator       = "GreaterThanUpperThreshold"
   evaluation_periods        = var.alarm_apigw_latency_evaluation
   datapoints_to_alarm       = var.alarm_apigw_latency_datapoints
   alarm_description         = "Latency in ${var.name} API Gateway above threshold"
