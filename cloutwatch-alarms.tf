@@ -3,8 +3,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_5xx_errors" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-5xx-errors"
   comparison_operator       = "GreaterThanUpperThreshold"
-  evaluation_periods        = "1"
-  datapoints_to_alarm       = "1"
+  evaluation_periods        = var.alarm_apigw_5xx_evaluation
+  datapoints_to_alarm       = var.alarm_apigw_5xx_datapoints
   alarm_description         = "Number of 5xx errors at ${var.name} API Gateway above threshold"
   alarm_actions             = var.alarm_sns_topics
   ok_actions                = var.alarm_sns_topics
@@ -41,8 +41,8 @@ resource "aws_cloudwatch_metric_alarm" "apigw_4xx_errors" {
 
   alarm_name                = "${var.environment_name}-apigw-${var.name}-4xx-errors"
   comparison_operator       = "GreaterThanUpperThreshold"
-  evaluation_periods        = "2"
-  datapoints_to_alarm       = "2"
+  evaluation_periods        = var.alarm_apigw_4xx_evaluation
+  datapoints_to_alarm       = var.alarm_apigw_4xx_datapoints
   alarm_description         = "Number of 400 errors at ${var.name} API Gateway above threshold"
   alarm_actions             = var.alarm_sns_topics
   ok_actions                = var.alarm_sns_topics

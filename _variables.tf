@@ -169,6 +169,26 @@ variable "alarm_apigw_latency_threshold" {
   default     = 9
 }
 
+variable "alarm_apigw_5xx_evaluation" {
+  description = "Api Gateway 5xx evaluation periods"
+  default     = 2
+}
+
+variable "alarm_apigw_5xx_datapoints" {
+  description = "Api Gateway 5xx data points to evaluate"
+  default     = 2
+}
+
+variable "alarm_apigw_4xx_evaluation" {
+  description = "Api Gateway 4xx evaluation periods"
+  default     = 2
+}
+
+variable "alarm_apigw_4xx_datapoints" {
+  description = "Api Gateway 4xx data points to evaluate"
+  default     = 2
+}
+
 variable "alarm_apigw_integration_latency_evaluation" {
   description = "Api Gateway integration latency evaluation periods"
   default     = 2
