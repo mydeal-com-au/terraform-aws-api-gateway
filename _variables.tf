@@ -149,6 +149,26 @@ variable "alarm_sns_topics" {
   description = "Alarm topics to create and alert on API Gateway service metrics. Leaving empty disables all alarms."
 }
 
+variable "alarm_apigw_5xx_errors_threshold" {
+  description = "Anomaly detection threshold for HTTP 500 errors"
+  default     = 5
+}
+
+variable "alarm_apigw_4xx_errors_threshold" {
+  description = "Anomaly detection threshold for HTTP 400 errors"
+  default     = 9
+}
+
+variable "alarm_apigw_integration_latency_threshold" {
+  description = "Anomaly detection threshold for Integration latency"
+  default     = 9
+}
+
+variable "alarm_apigw_latency_threshold" {
+  description = "Anomaly detection threshold for latency"
+  default     = 9
+}
+
 variable "alarm_apigw_integration_latency_evaluation" {
   description = "Api Gateway integration latency evaluation periods"
   default     = 2

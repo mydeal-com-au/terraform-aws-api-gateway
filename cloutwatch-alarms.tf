@@ -14,7 +14,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_5xx_errors" {
 
   metric_query {
     id          = "e1"
-    expression  = "ANOMALY_DETECTION_BAND(m1, 3)"
+    expression  = "ANOMALY_DETECTION_BAND(m1, ${var.alarm_apigw_5xx_errors_threshold})"
     label       = "5xx Errors (Expected)"
     return_data = "true"
   }
@@ -52,7 +52,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_4xx_errors" {
 
   metric_query {
     id          = "e1"
-    expression  = "ANOMALY_DETECTION_BAND(m1, 3)"
+    expression  = "ANOMALY_DETECTION_BAND(m1, ${var.alarm_apigw_4xx_errors_threshold})"
     label       = "4xx Errors (Expected)"
     return_data = "true"
   }
@@ -90,7 +90,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_integration_latency" {
 
   metric_query {
     id          = "e1"
-    expression  = "ANOMALY_DETECTION_BAND(m1, 3)"
+    expression  = "ANOMALY_DETECTION_BAND(m1, ${var.alarm_apigw_integration_latency_threshold})"
     label       = "IntegrationLatency (Expected)"
     return_data = "true"
   }
@@ -128,7 +128,7 @@ resource "aws_cloudwatch_metric_alarm" "apigw_latency" {
 
   metric_query {
     id          = "e1"
-    expression  = "ANOMALY_DETECTION_BAND(m1, 3)"
+    expression  = "ANOMALY_DETECTION_BAND(m1, ${var.alarm_apigw_latency_threshold})"
     label       = "Latency (Expected)"
     return_data = "true"
   }
