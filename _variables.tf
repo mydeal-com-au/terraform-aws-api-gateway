@@ -149,26 +149,6 @@ variable "alarm_sns_topics" {
   description = "Alarm topics to create and alert on API Gateway service metrics. Leaving empty disables all alarms."
 }
 
-variable "alarm_apigw_5xx_errors_threshold" {
-  description = "Max threshold of HTTP 500 errors allowed in a 5 minutes interval"
-  default     = 10
-}
-
-variable "alarm_apigw_4xx_errors_threshold" {
-  description = "Max threshold of HTTP 4000 errors allowed in a 5 minutes interval"
-  default     = 10
-}
-
-variable "alarm_apigw_integration_latency_threshold" {
-  description = "Max threshold of Integration latency(ms) allowed in a 5 minutes interval"
-  default     = 1000
-}
-
-variable "alarm_apigw_latency_threshold" {
-  description = "Max threshold of latency(ms) allowed in a 5 minutes interval"
-  default     = 1000
-}
-
 variable "alarm_apigw_integration_latency_evaluation" {
   description = "Api Gateway integration latency evaluation periods"
   default     = 2
