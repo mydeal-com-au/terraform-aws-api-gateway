@@ -165,8 +165,8 @@ variable "alarm_apigw_integration_latency_threshold" {
 }
 
 variable "alarm_apigw_latency_threshold" {
-  description = "Anomaly detection threshold for latency"
-  default     = 9
+  description = "Threshold for api gateway latency"
+  default     = 15
 }
 
 variable "alarm_apigw_5xx_evaluation" {
