@@ -31,3 +31,8 @@ output "api_gateway_authorizer_id" {
   value       = var.enable_custom_authorizer ? aws_api_gateway_authorizer.rest_authorizer[var.custom_authorizers[0].name].id : ""
   description = "authorizer id of rest api"
 }
+
+output "api_gateway_url" {
+  value       = var.api_type == "http" ? aws_apigatewayv2_stage.stage[0].invoke_url : aws_api_gateway_stage.rest_stage[0].invoke_url
+  description = "api gateway invoke url"
+}
