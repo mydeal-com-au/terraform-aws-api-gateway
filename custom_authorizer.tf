@@ -3,7 +3,7 @@ resource "aws_api_gateway_authorizer" "rest_authorizer" {
 
   name                           = each.value.name
   type                           = try(each.value.query_param, "") != "" ? "REQUEST" : "TOKEN"
-  identity_source                = try(each.value.query_param, "") != "" ? "method.request.querystring.${each.value.query_param}" : "method.request.header.Authorization")
+  identity_source                = try(each.value.query_param, "") != "" ? "method.request.querystring.${each.value.query_param}" : "method.request.header.Authorization"
   rest_api_id                    = aws_api_gateway_rest_api.rest_api[0].id
   authorizer_uri                 = aws_lambda_function.authorizer[each.value.name].invoke_arn
   authorizer_credentials         = aws_iam_role.invocation_role[each.value.name].arn
