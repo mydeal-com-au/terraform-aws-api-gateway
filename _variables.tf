@@ -133,9 +133,11 @@ variable "custom_authorizers" {
     name                          = string
     runtime                       = string
     custom_authorizer_lambda_code = string
-    jwks_uri                      = string
-    audience                      = string
-    token_issuer                  = string
+    query_param                   = optional(string)
+    jwks_uri                      = optional(string)
+    audience                      = optional(string)
+    token_issuer                  = optional(string)
+    variables                     = optional(map(string))
   }))
 }
 
