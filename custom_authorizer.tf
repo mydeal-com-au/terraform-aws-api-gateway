@@ -2,10 +2,12 @@ resource "aws_api_gateway_authorizer" "rest_authorizer" {
   for_each = { for custom_authorizer in var.custom_authorizers : custom_authorizer.name => custom_authorizer if var.api_type == "rest" }
 
   name                           = each.value.name
+  type                           = try(each.value.query_param, "") != "" ? "REQUEST" : "TOKEN"
+  identity_source                = try(each.value.query_param, "") != "" ? "method.request.querystring.${each.value.query_param}" : "method.request.header.Authorization")
   rest_api_id                    = aws_api_gateway_rest_api.rest_api[0].id
   authorizer_uri                 = aws_lambda_function.authorizer[each.value.name].invoke_arn
   authorizer_credentials         = aws_iam_role.invocation_role[each.value.name].arn
-  identity_validation_expression = "^Bearer [-0-9a-zA-z\\.]*$"
+  identity_validation_expression = try(each.value.query_param, "") != "" ? null : "^Bearer [-0-9a-zA-z\\.]*$"
 }
 
 resource "aws_iam_role" "invocation_role" {
@@ -74,11 +76,11 @@ resource "aws_lambda_function" "authorizer" {
   runtime          = each.value.runtime
 
   environment {
-    variables = {
+    variables = try(each.value.variables, {
       JWKS_URI     = each.value.jwks_uri
       AUDIENCE     = each.value.audience
       TOKEN_ISSUER = each.value.token_issuer
-    }
+    })
   }
 }
 
