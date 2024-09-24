@@ -8,6 +8,12 @@ variable "api_type" {
   type        = string
 }
 
+variable "api_key_source" {
+  description = "Source for the API key"
+  type        = string
+  default     = "HEADER"
+}
+
 variable "api_description" {
   description = "Description for the API"
   type        = string
