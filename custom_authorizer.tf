@@ -76,7 +76,7 @@ resource "aws_lambda_function" "authorizer" {
   runtime          = each.value.runtime
 
   environment {
-    variables = try(each.value.variables, {
+    variables = coalesce(try(each.value.variables, null), {
       JWKS_URI     = each.value.jwks_uri
       AUDIENCE     = each.value.audience
       TOKEN_ISSUER = each.value.token_issuer
