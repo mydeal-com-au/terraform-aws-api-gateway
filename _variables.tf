@@ -258,3 +258,9 @@ variable "redeployment_sha" {
   default = ""
   type    = string
 }
+
+variable "attach_resource_policy" {
+  description = "set up resource policy for api gateway"
+  default     = false
+  type        = bool
+}
