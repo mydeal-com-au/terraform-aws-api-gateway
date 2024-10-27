@@ -46,38 +46,17 @@ data "aws_iam_policy_document" "resource_policy" {
       effect = "Allow"
 
       principals {
-        type        = "AWS"
+        type        = "*"
         identifiers = ["*"]
       }
 
       actions   = ["execute-api:Invoke"]
-      resources = [aws_api_gateway_rest_api.rest_api[0].execution_arn]
+      resources = ["${aws_api_gateway_rest_api.rest_api[0].execution_arn}/*"]
 
       condition {
         test     = "IpAddress"
         variable = "aws:SourceIp"
         values   = var.allowed_ips
-      }
-    }
-  }
-
-  dynamic "statement" {
-    for_each = var.vpc_id != "" ? [1] : []
-    content {
-      effect = "Allow"
-
-      principals {
-        type        = "AWS"
-        identifiers = ["*"]
-      }
-
-      actions   = ["execute-api:Invoke"]
-      resources = [aws_api_gateway_rest_api.rest_api[0].execution_arn]
-
-      condition {
-        test     = "StringEquals"
-        variable = "aws:SourceVpc"
-        values   = [var.vpc_id]
       }
     }
   }
