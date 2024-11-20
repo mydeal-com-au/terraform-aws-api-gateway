@@ -19,7 +19,7 @@ resource "aws_api_gateway_deployment" "rest_deployment" {
       [for method in var.routes : try(aws_api_gateway_method.rest_method[method.name], {}) if var.api_type == "rest"],
       [for integration in var.routes : try(aws_api_gateway_integration.integration[integration.name], {}) if var.api_type == "rest"],
       [try(aws_api_gateway_rest_api.rest_api, {})],
-      [try(aws_api_gateway_rest_api_policy.rest_api_policy, {})],
+      [try(data.aws_iam_policy_document.resource_policy, {})],
       [var.redeployment_sha]
     ])))
   }
