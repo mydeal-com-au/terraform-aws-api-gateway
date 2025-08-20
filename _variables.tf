@@ -159,62 +159,107 @@ variable "alarm_sns_topics" {
 
 variable "alarm_apigw_5xx_errors_threshold" {
   description = "Anomaly detection threshold for HTTP 500 errors"
-  default     = 5
+  default     = 20
 }
 
 variable "alarm_apigw_4xx_errors_threshold" {
   description = "Anomaly detection threshold for HTTP 400 errors"
-  default     = 9
+  default     = 20
 }
 
-variable "alarm_apigw_integration_latency_threshold" {
-  description = "Anomaly detection threshold for Integration latency"
-  default     = 9
-}
-
-variable "alarm_apigw_latency_threshold" {
-  description = "Threshold for api gateway latency"
-  default     = 15
-}
 
 variable "alarm_apigw_5xx_evaluation" {
   description = "Api Gateway 5xx evaluation periods"
-  default     = 2
+  default     = 4
 }
 
 variable "alarm_apigw_5xx_datapoints" {
   description = "Api Gateway 5xx data points to evaluate"
-  default     = 2
+  default     = 4
+}
+
+variable "alarm_apigw_5xx_period" {
+    description = "Api Gateway 5xx period in seconds"
+    default     = 300
+}
+
+variable "alarm_apigw_5xx_statistic" {
+  description = "Api Gateway 5xx statistic"
+  default     = "Sum"
+  type        = string
 }
 
 variable "alarm_apigw_4xx_evaluation" {
   description = "Api Gateway 4xx evaluation periods"
-  default     = 2
+  default     = 4
 }
 
 variable "alarm_apigw_4xx_datapoints" {
   description = "Api Gateway 4xx data points to evaluate"
-  default     = 2
+  default     = 4
+}
+
+variable "alarm_apigw_4xx_period" {
+  description = "Api Gateway 5xx period in seconds"
+  default     = 300
+}
+
+variable "alarm_apigw_4xx_statistic" {
+  description = "Api Gateway 5xx statistic"
+  default     = "Sum"
+  type        = string
+}
+
+variable "alarm_apigw_integration_latency_threshold" {
+  description = "Anomaly detection threshold for Integration latency"
+  default     = 15000
+}
+
+variable "alarm_apigw_latency_threshold" {
+  description = "Threshold for api gateway latency"
+  default     = 15000
 }
 
 variable "alarm_apigw_integration_latency_evaluation" {
   description = "Api Gateway integration latency evaluation periods"
-  default     = 2
+  default     = 4
 }
 
 variable "alarm_apigw_integration_latency_datapoints" {
   description = "Api Gateway integration latency data points to evaluate"
-  default     = 2
+  default     = 4
+}
+
+variable "alarm_apigw_integration_latency_period" {
+  description = "Api Gateway integration latency period in seconds"
+  default     = 300
+}
+
+variable "alarm_apigw_integration_latency_statistic" {
+  description = "Api Gateway integration latency statistic"
+  default     = "Maximum"
+  type        = string
 }
 
 variable "alarm_apigw_latency_evaluation" {
   description = "Api Gateway latency evaluation periods"
-  default     = 2
+  default     = 4
 }
 
 variable "alarm_apigw_latency_datapoints" {
   description = "Api Gateway latency data points to evaluate"
-  default     = 2
+  default     = 4
+}
+
+variable "alarm_apigw_latency_period" {
+  description = "Api Gateway integration latency period in seconds"
+  default     = 300
+}
+
+variable "alarm_apigw_latency_statistic" {
+  description = "Api Gateway integration latency statistic"
+  default     = "Maximum"
+  type        = string
 }
 
 variable "vpc_link_subnets" {
