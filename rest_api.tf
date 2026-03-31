@@ -105,6 +105,7 @@ resource "aws_api_gateway_integration" "integration" {
 
   connection_type = each.value.connection_type
   connection_id   = each.value.connection_type == "VPC_LINK" ? try(aws_api_gateway_vpc_link.gateway_vpc_link[0].id, var.vpc_link_id) : ""
+  integration_target = var.enable_vpc_link_v2 && each.value.connection_type == "VPC_LINK" && var.target_type == "alb" ? var.vpc_link_target_id : null
 }
 
 resource "aws_lb" "integration_vpc_endpoint" {
