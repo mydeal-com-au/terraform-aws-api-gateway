@@ -309,3 +309,9 @@ variable "attach_resource_policy" {
   default     = false
   type        = bool
 }
+
+variable "enable_vpc_link_v2" {
+  type = bool
+  default = false
+  description = "Enable VPC Link v2 for REST API integrations"
+}
