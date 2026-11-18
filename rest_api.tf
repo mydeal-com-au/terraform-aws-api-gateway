@@ -18,6 +18,7 @@ resource "aws_api_gateway_deployment" "rest_deployment" {
       [for resource in var.routes : try(aws_api_gateway_resource.rest_resource[resource.name], {}) if var.api_type == "rest" && resource.name != "root"],
       [for method in var.routes : try(aws_api_gateway_method.rest_method[method.name], {}) if var.api_type == "rest"],
       [for integration in var.routes : try(aws_api_gateway_integration.integration[integration.name], {}) if var.api_type == "rest"],
+      [for integration in var.routes : try(aws_api_gateway_integration.integration_lambda[integration.name], {}) if var.api_type == "rest" && var.target_type == "lambda"],
       [try(aws_api_gateway_rest_api.rest_api, {})],
       [try(data.aws_iam_policy_document.resource_policy, {})],
       [var.redeployment_sha]
@@ -28,7 +29,11 @@ resource "aws_api_gateway_deployment" "rest_deployment" {
     create_before_destroy = true
   }
 
-  depends_on = [aws_api_gateway_method.rest_method, aws_api_gateway_integration.integration]
+  depends_on = [
+    aws_api_gateway_method.rest_method,
+    aws_api_gateway_integration.integration,
+    aws_api_gateway_integration.integration_lambda,
+  ]
 }
 
 resource "aws_api_gateway_stage" "rest_stage" {
@@ -159,7 +164,7 @@ resource "aws_api_gateway_integration" "integration_lambda" {
   for_each                = { for route in var.routes : route.name => route if var.api_type == "rest" && var.target_type == "lambda" }
   rest_api_id             = aws_api_gateway_rest_api.rest_api[0].id
   resource_id             = each.value.name == "root" ? aws_api_gateway_rest_api.rest_api[0].root_resource_id : aws_api_gateway_resource.rest_resource[each.value.name].id
-  http_method             = each.value.method
+  http_method             = aws_api_gateway_method.rest_method[each.key].http_method
   integration_http_method = "POST"
   type                    = each.value.integration_type
   uri                     = each.value.integration_uri
